@@ -1,7 +1,7 @@
 var Enemy = function() {
 	this.image = document.createElement("img");
-	this.x = 100;
-	this.y = 100;
+	this.x = 500;
+	this.y = 500;
 	this.width = 194;
 	this.height = 103;
 	
