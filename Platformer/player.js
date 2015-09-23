@@ -12,16 +12,23 @@ Player.prototype.update = function(deltaTime)
 {
 	if( typeof(this.rotation) == "undefined" )
 		this.rotation = 0;
-	this.rotation += deltaTime;
 
 	
-	if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
+	if(keyboard.isKeyDown(keyboard.KEY_RIGHT) == true)
+	{
+		this.rotation += deltaTime;
+	}
+	else
+	{
+		this.rotation = this.rotation;
+	}
+	if(keyboard.isKeyDown(keyboard.KEY_LEFT) == true)
 	{
 		this.rotation -= deltaTime;
 	}
 	else
 	{
-		this.rotation += deltaTime;
+		this.rotation = this.rotation;
 	}
 }
 
