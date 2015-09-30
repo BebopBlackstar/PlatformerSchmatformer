@@ -1,11 +1,11 @@
 var Enemy = function() {
 	this.image = document.createElement("img");
-	this.x = 160;
-	this.y = 120;
+	this.x = 500;
+	this.y = 500;
 	this.width = 194;
 	this.height = 103;
 	
-	this.image.src = "alien_64.png";
+	this.image.src = "enemy.png";
 };
 
 Enemy.prototype.update = function(deltaTime)

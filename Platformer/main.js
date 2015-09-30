@@ -39,7 +39,6 @@ var TILESET_PADDING = 2;
 var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
-var BULLET_SPEED = 2;
 
  // abitrary choice for 1m
 var METER = TILE;
