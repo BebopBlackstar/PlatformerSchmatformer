@@ -40,6 +40,7 @@ var Player = function() {
 	this.jumping = false;
 	
 	this.direction = LEFT;
+	this.cooldownTimer = 0;
 
 };
 
@@ -51,7 +52,7 @@ Player.prototype.update = function(deltaTime)
 	 var jump = false;
 	 var up = false;
 	 var down = false;
-	 var shooting = false;
+	 var shoot = false;
 	 
 	 // check keypress events
 	 if(keyboard.isKeyDown(keyboard.KEY_LEFT) == true) {
@@ -81,8 +82,23 @@ Player.prototype.update = function(deltaTime)
 			 }
 		 }
 	 }
-	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
+	 if(keyboard.isKeyDown(keyboard.KEY_UP) == true) {
 		 jump = true;
+	 }
+	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
+		shoot = true;
+		if(shoot = true){
+		bullets.push(new Bullet);
+		}
+	 }
+	 
+	 if(this.cooldownTimer>0)
+	 {
+		 this.cooldownTimer -= deltaTime;
+	 }
+	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0) {
+		 sfxFire.play();
+		 this.cooldownTimer = 0.3;
 	 }
 
 	 var wasleft = this.velocity.x < 0;

@@ -44,6 +44,10 @@ var STATE_SPLASH = 0;
 var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
 
+var musicBackground;
+var sfxFire;
+
+
 var gameState = STATE_SPLASH;
 
  // abitrary choice for 1m
@@ -68,15 +72,18 @@ var fpsTime = 0;
 var chuckNorris = document.createElement("img");
 chuckNorris.src = "hero.png";
 
+var bullets = [];
+
 var player = new Player();
 var enemy = new Enemy();
-var bullet = new Bullet();
 var keyboard = new Keyboard();
+var bullet = new Bullet();
 
 var tileset = document.createElement("img");
 	tileset.src = "tileset.png";
 	
 var cells = []; // the array that holds our simplified collision data
+
 function initialize() {
 	 for(var layerIdx = 0; layerIdx < LAYER_COUNT; layerIdx++) { // initialize the collision map
 		 cells[layerIdx] = [];
@@ -101,6 +108,24 @@ function initialize() {
 			}
 		}
 	}
+	musicBackground = new Howl(
+	{
+		urls: ["background.ogg"],
+		loop: true,
+		buffer: true,
+		volume: 0.5
+	});
+	musicBackground.play();
+	
+	sfxFire = new Howl(
+	{
+		urls: ["fireEffect.ogg"],
+		buffer: true,
+		volume: 1,
+		onend: function(){
+			isSfxPlaying = false;
+		}
+	});
 }
 
 function cellAtPixelCoord(layer, x,y)
@@ -180,7 +205,12 @@ function runGame(deltaTime)
 		fps = fpsCount;
 		fpsCount = 0;
 	}		
-		
+	for(var i=0; i<bullets.length; i++)
+	{
+		bullets[i].update(deltaTime);
+		bullets[i].draw();
+	}
+
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
 	context.fillText("FPS: " + fps, 5, 20, 100);
