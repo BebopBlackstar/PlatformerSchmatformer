@@ -40,6 +40,11 @@ var TILESET_SPACING = 2;
 var TILESET_COUNT_X = 14;
 var TILESET_COUNT_Y = 14;
 var BULLET_SPEED = 2;
+var STATE_SPLASH = 0;
+var STATE_GAME = 1;
+var STATE_GAMEOVER = 2;
+
+var gameState = STATE_SPLASH;
 
  // abitrary choice for 1m
 var METER = TILE;
@@ -160,13 +165,8 @@ function drawMap()
 	 }
 }
 
-function run()
+function runGame(deltaTime)
 {
-	context.fillStyle = "#ccc";		
-	context.fillRect(0, 0, canvas.width, canvas.height);
-	
-	var deltaTime = getDeltaTime();
-	
 	player.update(deltaTime);
 	enemy.update(deltaTime);
 	drawMap();	
@@ -184,6 +184,33 @@ function run()
 	context.fillStyle = "#f00";
 	context.font="14px Arial";
 	context.fillText("FPS: " + fps, 5, 20, 100);
+}
+
+function runSplash()
+{
+	if(keyboard.isKeyDown (keyboard.KEY_SPACE) == true)
+		gameState = STATE_GAME;
+}
+
+function run()
+{
+	context.fillStyle = "#ccc";		
+	context.fillRect(0, 0, canvas.width, canvas.height);
+	
+	var deltaTime = getDeltaTime();
+	
+	switch(gameState)
+	{
+		case STATE_SPLASH:
+			runSplash(deltaTime);
+			break;
+		case STATE_GAME:
+			runGame(deltaTime);
+			break;
+		case STATE_GAMEOVER:
+			runGameover(deltaTime);
+			break;
+	}
 }
 
 initialize();
