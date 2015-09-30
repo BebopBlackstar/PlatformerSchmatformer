@@ -34,25 +34,6 @@ Player.prototype.update = function(deltaTime)
 	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
 		 jump = true;
 	 }
-	 if(keyboard.isKeyDown(keyboard.KEY_UP) == true) {
-		 up = true;
-		 if(up == true) {
-			 this.sprite.setAnimation(ANIM_???climbing???);
-		 }
-	 }
-	 
-	 if(keyboard.isKeyDown(keyboard.KEY_DOWN) == true) {
-		 down = true;
-		 if(down == true) {
-			 this.sprite.setAnimation(ANIM_???climbing???);
-		 }
-	 }
-	 if(keyboard.isKeyDown(keyboard.KEY_SHIFT) == true) {
-		 shoot = true;
-		 if(shoot == true) {
-			 this.sprite.setAnimation(ANIM_???shooting???);
-		 }
-	 }
 
 	 var wasleft = this.velocity.x < 0;
 	 var wasright = this.velocity.x > 0;
