@@ -30,9 +30,30 @@ Player.prototype.update = function(deltaTime)
 	 }
 	 if(keyboard.isKeyDown(keyboard.KEY_RIGHT) == true) {
 	 right = true;
+<<<<<<< HEAD
 	 }
 	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
 		 jump = true;
+=======
+	 this.direction = RIGHT;
+	if(this.sprite.currentAnimation != ANIM_WALK_RIGHT && this.jumping == false)
+		this.sprite.setAnimation(ANIM_WALK_RIGHT);
+	 }
+	 else {
+		 if(this.jumping == false && this.falling == false)
+		 {
+			 if(this.direction == LEFT)
+			 {
+				 if(this.sprite.currentAnimation != ANIM_IDLE_LEFT)
+					this.sprite.setAnimation(ANIM_IDLE_LEFT);
+			 }
+			 else
+			 {
+				 if(this.sprite.currentAnimation != ANIM_IDLE_RIGHT)
+					this.sprite.setAnimation(ANIM_IDLE_RIGHT);
+			 }
+		 }
+>>>>>>> parent of c392819... pre added climbing and bullet anims
 	 }
 
 	 var wasleft = this.velocity.x < 0;
