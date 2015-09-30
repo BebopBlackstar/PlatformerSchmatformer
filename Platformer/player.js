@@ -9,7 +9,8 @@ var ANIM_JUMP_RIGHT = 4;
 var ANIM_WALK_RIGHT = 5;
 var ANIM_MAX = 6;
 
-var Player = function() {
+var Player = function()
+{
 	this.sprite = new Sprite("ChuckNorris.png");
 	this.sprite.buildAnimation(12, 8, 165, 126, 0.05,
 		[0, 1, 2, 3, 4, 5, 6, 7]);

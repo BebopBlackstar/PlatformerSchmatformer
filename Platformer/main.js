@@ -207,8 +207,7 @@ function runGame(deltaTime)
 	}		
 	for(var i=0; i<bullets.length; i++)
 	{
-		bullets[i].update(deltaTime);
-		bullets[i].draw();
+	bullets[i].update(deltaTime);
 	}
 
 	context.fillStyle = "#f00";
