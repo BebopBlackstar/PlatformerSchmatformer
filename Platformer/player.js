@@ -81,6 +81,9 @@ Player.prototype.update = function(deltaTime)
 			 }
 		 }
 	 }
+	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
+		 jump = true;
+	 }
 
 	 var wasleft = this.velocity.x < 0;
 	 var wasright = this.velocity.x > 0;
