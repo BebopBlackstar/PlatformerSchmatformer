@@ -396,9 +396,11 @@ function runGameFinal()
 		player.position.set( 9*TILE, 0*TILE );
 		context.fillStyle = "#000";
 		context.font = "36px Arial";
-        var message = "You are successful."    
+        var message = "You are successful."
         var textMeasure = context.measureText(message);
 		context.fillText(message, SCREEN_WIDTH/2 - (textMeasure.width/2), SCREEN_HEIGHT/2);
+		context.font = "20px Arial";
+		context.fillText("Press SPACE to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200);		
 }
 
 function run()

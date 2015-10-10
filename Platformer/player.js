@@ -116,6 +116,9 @@ Player.prototype.update = function(deltaTime)
             case 2:
                 gameState = STATE_SPLASH
                 break;
+			case 3:
+				gameState = STATE_SPLASH
+				break;
         }
 	 }
 

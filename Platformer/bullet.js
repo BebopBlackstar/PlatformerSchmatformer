@@ -14,7 +14,6 @@ var Bullet = function(x, y, moveRight)
 	if(this.moveRight == true)
 		this.velocity.set(MAXDX *2, 0);
 	else
-		this.sprite = new Sprite("roundL.png");
 		this.velocity.set(-MAXDX *2, 0);
 }
 
