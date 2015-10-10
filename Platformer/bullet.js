@@ -1,10 +1,5 @@
 var Bullet = function(x, y, moveRight)
 {
-	this.sprite = new Sprite("roundR.png");
-	this.sprite.buildAnimation(1, 1, 32, 32, -1, [0]);
-	this.sprite.setAnimationOffset(0, 0, 0);
-	this.sprite.setLoop(0, false);
-	
 	this.position = new Vector2();
 	this.position.set(x, y);
 	
@@ -14,11 +9,18 @@ var Bullet = function(x, y, moveRight)
 	if(this.moveRight == true)
 	{
 		this.velocity.set(MAXDX *2, 0);
+		this.sprite = new Sprite("roundR.png");
+		this.sprite.buildAnimation(1, 1, 32, 32, -1, [0]);
+		this.sprite.setAnimationOffset(0, 0, 0);
+		this.sprite.setLoop(0, false);
 	}
 	else
 		{
 		this.velocity.set(-MAXDX *2, 0);
-		//this.sprite = new Sprite("roundL.png");
+		this.sprite = new Sprite("roundL.png");
+		this.sprite.buildAnimation(1, 1, 32, 32, -1, [0]);
+		this.sprite.setAnimationOffset(0, 0, 0);
+		this.sprite.setLoop(0, false);
 		}
 }
 
