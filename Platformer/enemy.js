@@ -14,6 +14,7 @@ var Enemy = function(x, y)
 	this.velocity = new Vector2();
 	this.moveRight = true;
 	this.pause = 0;
+	this.life = 1;
 };
 
 Enemy.prototype.update = function(dt)

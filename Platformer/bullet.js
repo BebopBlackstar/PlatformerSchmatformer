@@ -12,9 +12,14 @@ var Bullet = function(x, y, moveRight)
 	
 	this.moveRight = moveRight;
 	if(this.moveRight == true)
+	{
 		this.velocity.set(MAXDX *2, 0);
+	}
 	else
+		{
 		this.velocity.set(-MAXDX *2, 0);
+		//this.sprite = new Sprite("roundL.png");
+		}
 }
 
 Bullet.prototype.update = function(dt)

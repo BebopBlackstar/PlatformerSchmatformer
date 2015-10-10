@@ -42,6 +42,8 @@ var Player = function()
 	
 	this.direction = LEFT;
 	this.cooldownTimer = 0;
+	
+	this.lives = 3;
 
 };
 
@@ -107,19 +109,24 @@ Player.prototype.update = function(deltaTime)
 					 shoot = true;
 						if(shoot = true)
 						{
-							var bullet = new Bullet(this.position.x, this.position.y, true);
+							var bulletRight = false;
+							//calculate bulletRight appropriately
+							if (this.direction == RIGHT) {
+								bulletRight = true;
+							}
+							else {
+								
+							}
+							var bullet = new Bullet(this.position.x, this.position.y, bulletRight);
 							bullets.push(bullet);
 						}
 					 
 					}
                 break;
-            case 2:
+            default:
                 gameState = STATE_SPLASH
                 break;
-			case 3:
-				gameState = STATE_SPLASH
-				break;
-        }
+			}
 	 }
 
 
@@ -231,13 +238,18 @@ Player.prototype.update = function(deltaTime)
 	
 	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true)
 	{
-		gameState = STATE_FINAL;
+		gameState = STATE_SUCCESS;
 	}
 	
 	if(cellAtTileCoord(LAYER_OBJECT_DEATH, tx, ty) == true)
 	{
-		lives -= 1;
+		this.lives -= 1;
+		if(this.lives > 0){
 		gameState = STATE_GAMEOVER;
+		}
+		else {
+			gameState = STATE_FAILURE;
+		}
 	}
 }
 

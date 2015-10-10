@@ -58,7 +58,8 @@ var sfxFire;
 var STATE_SPLASH = 0;
 var STATE_GAME = 1;
 var STATE_GAMEOVER = 2;
-var STATE_FINAL = 3;
+var STATE_SUCCESS = 3;
+var STATE_FAILURE = 4;
 
 var gameState = STATE_SPLASH;
 
@@ -91,7 +92,6 @@ heartImage.src = "heart.png";
 
 var bullets = [];
 var score = 0;
-var lives = 3;
 var player = new Player();
 var keyboard = new Keyboard();
 
@@ -128,28 +128,31 @@ function initialize()
 				idx++;
 			}
 		}               // add enemies
-		idx = 0;
-		for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++) {
-			for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++) {
-				if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0) {
-					var px = tileToPixel(x);
-					var py = tileToPixel(y);
-					var e = new Enemy(px, py);
-					enemies.push(e);
-				}
-				idx++;
+		
+	}
+
+	idx = 0;
+	for(var y = 0; y < level1.layers[LAYER_OBJECT_ENEMIES].height; y++) {
+		for(var x = 0; x < level1.layers[LAYER_OBJECT_ENEMIES].width; x++) {
+			if(level1.layers[LAYER_OBJECT_ENEMIES].data[idx] != 0) {
+				var px = tileToPixel(x);
+				var py = tileToPixel(y);
+				var e = new Enemy(px, py);
+				enemies.push(e);
 			}
+			idx++;
 		}
-			cells[LAYER_OBJECT_TRIGGERS] = [];
-			idx = 0;
-			for(var y = 0; y < level1.layers[LAYER_OBJECT_TRIGGERS].height; y++) {
-				cells[LAYER_OBJECT_TRIGGERS][y] = [];
-				for(var x = 0; x < level1.layers[LAYER_OBJECT_TRIGGERS].width; x++) {
-					if(level1.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0) {
-						cells[LAYER_OBJECT_TRIGGERS][y][x] = 1;
-						cells[LAYER_OBJECT_TRIGGERS][y-1][x] = 1;
-						cells[LAYER_OBJECT_TRIGGERS][y-1][x+1] = 1;
-						cells[LAYER_OBJECT_TRIGGERS][y][x+1] = 1;
+	}
+		cells[LAYER_OBJECT_TRIGGERS] = [];
+		idx = 0;
+		for(var y = 0; y < level1.layers[LAYER_OBJECT_TRIGGERS].height; y++) {
+			cells[LAYER_OBJECT_TRIGGERS][y] = [];
+			for(var x = 0; x < level1.layers[LAYER_OBJECT_TRIGGERS].width; x++) {
+				if(level1.layers[LAYER_OBJECT_TRIGGERS].data[idx] != 0) {
+					cells[LAYER_OBJECT_TRIGGERS][y][x] = 1;
+					cells[LAYER_OBJECT_TRIGGERS][y-1][x] = 1;
+					cells[LAYER_OBJECT_TRIGGERS][y-1][x+1] = 1;
+					cells[LAYER_OBJECT_TRIGGERS][y][x+1] = 1;
 				}
 				else if(cells[LAYER_OBJECT_TRIGGERS][y][x] != 1) {
 					// if we haven't set this cell's value, then set it to 0 now
@@ -159,26 +162,26 @@ function initialize()
 			}
 			
 		}
-			cells[LAYER_OBJECT_DEATH] = [];
-			idx = 0;
-			for(var y = 0; y < level1.layers[LAYER_OBJECT_DEATH].height; y++) {
-				cells[LAYER_OBJECT_DEATH][y] = [];
-				for(var x = 0; x < level1.layers[LAYER_OBJECT_DEATH].width; x++) {
-					if(level1.layers[LAYER_OBJECT_DEATH].data[idx] != 0) {
-						cells[LAYER_OBJECT_DEATH][y][x] = 1;
-						cells[LAYER_OBJECT_DEATH][y-1][x] = 1;
-						cells[LAYER_OBJECT_DEATH][y-1][x+1] = 1;
-						cells[LAYER_OBJECT_DEATH][y][x+1] = 1;
-				}
-				else if(cells[LAYER_OBJECT_DEATH][y][x] != 1) {
-					// if we haven't set this cell's value, then set it to 0 now
-					cells[LAYER_OBJECT_DEATH][y][x] = 0;
-				}
-				idx++;
+		cells[LAYER_OBJECT_DEATH] = [];
+		idx = 0;
+		for(var y = 0; y < level1.layers[LAYER_OBJECT_DEATH].height; y++) {
+			cells[LAYER_OBJECT_DEATH][y] = [];
+			for(var x = 0; x < level1.layers[LAYER_OBJECT_DEATH].width; x++) {
+				if(level1.layers[LAYER_OBJECT_DEATH].data[idx] != 0) {
+					cells[LAYER_OBJECT_DEATH][y][x] = 1;
+					cells[LAYER_OBJECT_DEATH][y-1][x] = 1;
+					cells[LAYER_OBJECT_DEATH][y-1][x+1] = 1;
+					cells[LAYER_OBJECT_DEATH][y][x+1] = 1;
 			}
-			
+			else if(cells[LAYER_OBJECT_DEATH][y][x] != 1) {
+				// if we haven't set this cell's value, then set it to 0 now
+				cells[LAYER_OBJECT_DEATH][y][x] = 0;
+			}
+			idx++;
 		}
-}
+		
+	}
+		
 	musicBackground = new Howl(
 	{
 		urls: ["background.ogg"],
@@ -313,8 +316,13 @@ function runGame(deltaTime)
 		enemies[i].update(deltaTime);
 		if(intersects(player.position.x, player.position.y, TILE, TILE, enemies[i].position.x, enemies[i].position.y, TILE, TILE) == true)
 		{
-			lives -= 1;
-			gameState = STATE_GAMEOVER;
+			player.lives -= 1;
+			if(player.lives > 0){
+				gameState = STATE_GAMEOVER;
+			}
+			else {
+				gameState = STATE_FAILURE;
+			}
 			break;
 		}
 	}	
@@ -338,6 +346,7 @@ function runGame(deltaTime)
 				hit = true;
 				// increment the player score
 				score += 1;
+				enemies.life -= 1;
 				break;
 			}
 		}
@@ -353,9 +362,9 @@ function runGame(deltaTime)
 		bullets[i].draw();
 	}
 	
-	for(var i=0; i<enemies.length; i++)
+	for(var j=0; j<enemies.length; j++)
 	{
-		enemies[i].draw();
+		enemies[j].draw();
 	}
 
 	context.fillStyle = "#f00";
@@ -391,7 +400,20 @@ function runGameover()
 		context.fillText(message, SCREEN_WIDTH/2 - (textMeasure.width/2), SCREEN_HEIGHT/2);
 }
 
-function runGameFinal()
+function runGameFailure()
+{
+		player.position.set( 9*TILE, 0*TILE );
+		context.fillStyle = "#000";
+		context.font = "36px Arial";
+        var message = "You have failed."    
+        var textMeasure = context.measureText(message);
+		context.fillText(message, SCREEN_WIDTH/2 - (textMeasure.width/2), SCREEN_HEIGHT/2);
+		context.font = "20px Arial";
+		context.fillText("Press SPACE to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200);
+		player.lives = 3;
+}
+
+function runGameSuccess()
 {
 		player.position.set( 9*TILE, 0*TILE );
 		context.fillStyle = "#000";
@@ -400,7 +422,8 @@ function runGameFinal()
         var textMeasure = context.measureText(message);
 		context.fillText(message, SCREEN_WIDTH/2 - (textMeasure.width/2), SCREEN_HEIGHT/2);
 		context.font = "20px Arial";
-		context.fillText("Press SPACE to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200);		
+		context.fillText("Press SPACE to restart", SCREEN_WIDTH/2, SCREEN_HEIGHT/2 + 200);
+		player.lives = 3;		
 }
 
 function run()
@@ -423,11 +446,14 @@ function run()
 		case STATE_GAMEOVER:
 			runGameover(deltaTime);
 			break;
-		case STATE_FINAL:
-			runGameFinal(deltaTime);
+		case STATE_SUCCESS:
+			runGameSuccess(deltaTime);
+			break;
+		case STATE_FAILURE:
+			runGameFailure(deltaTime);
 			break;
 	}
-		for(var i=0; i<lives; i++)
+		for(var i=0; i<player.lives; i++)
 	{
 		context.drawImage(heartImage, ((SCREEN_WIDTH/2) + (SCREEN_WIDTH/4)) + ((heartImage.width+2)*i), 10);
 	}
