@@ -45,6 +45,7 @@ var Player = function()
 
 };
 
+
 Player.prototype.update = function(deltaTime)
 {
 	this.sprite.update(deltaTime);
@@ -86,21 +87,38 @@ Player.prototype.update = function(deltaTime)
 	 if(keyboard.isKeyDown(keyboard.KEY_UP) == true) {
 		 jump = true;
 	 }
-	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true) {
-		shoot = true;
-		if(shoot = true){
-		bullets.push(new Bullet);
-		}
-	 }
 	 
 	 if(this.cooldownTimer>0)
 	 {
 		 this.cooldownTimer -= deltaTime;
 	 }
-	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true && this.cooldownTimer <= 0) {
-		 sfxFire.play();
-		 this.cooldownTimer = 0.3;
+	 
+	 if(keyboard.isKeyDown(keyboard.KEY_SPACE) == true)
+	 {
+        switch (gameState) {
+           case 0:
+                   gameState = STATE_GAME
+                break;
+            case 1:
+                   if (this.cooldownTimer <= 0)
+					{
+					 sfxFire.play();
+					 this.cooldownTimer = 0.3;
+					 shoot = true;
+						if(shoot = true)
+						{
+							var bullet = new Bullet(this.position.x, this.position.y, true);
+							bullets.push(bullet);
+						}
+					 
+					}
+                break;
+            case 2:
+                gameState = STATE_SPLASH
+                break;
+        }
 	 }
+
 
 	 var wasleft = this.velocity.x < 0;
 	 var wasright = this.velocity.x > 0;
@@ -207,9 +225,21 @@ Player.prototype.update = function(deltaTime)
 	var cellright = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty);
 	var celldown = cellAtTileCoord(LAYER_PLATFORMS, tx, ty + 1);
 	var celldiag = cellAtTileCoord(LAYER_PLATFORMS, tx + 1, ty + 1);
+	
+	if(cellAtTileCoord(LAYER_OBJECT_TRIGGERS, tx, ty) == true)
+	{
+		gameState = STATE_FINAL;
+	}
+	
+	if(cellAtTileCoord(LAYER_OBJECT_DEATH, tx, ty) == true)
+	{
+		lives -= 1;
+		gameState = STATE_GAMEOVER;
+	}
 }
 
 Player.prototype.draw = function()
 {
-	this.sprite.draw(context, this.position.x, this.position.y);
+	var screenX = this.position.x - worldOffsetX;
+	this.sprite.draw(context, screenX, this.position.y);
 }
